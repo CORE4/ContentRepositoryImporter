@@ -21,6 +21,7 @@ use TYPO3\TYPO3CR\Domain\Model\NodeType;
 use TYPO3\TYPO3CR\Domain\Repository\NodeDataRepository;
 use TYPO3\TYPO3CR\Domain\Service\ContextFactoryInterface;
 use TYPO3\TYPO3CR\Domain\Service\NodeTypeManager;
+use TYPO3\TYPO3CR\Domain\Utility\NodePaths;
 
 /**
  * Abstract Importer
@@ -557,15 +558,19 @@ abstract class AbstractImporter implements ImporterInterface
      */
     protected function initializeStorageNode($nodePath, $title)
     {
-        preg_match('|([a-z0-9\-]+/)*([a-z0-9\-]+)$|', $nodePath, $matches);
-        $nodeName = $matches[2];
-        $uriPathSegment = Slug::create($title)->getValue();
-
-        $storageNodeTemplate = new NodeTemplate();
-        $storageNodeTemplate->setNodeType($this->nodeTypeManager->getNodeType($this->storageNodeTypeName));
+        if (!is_string($nodePath) || $nodePath === '') {
+            throw new \InvalidArgumentException('Invalid node path specified for storage node.', 1464103755517);
+        }
 
         $this->storageNode = $this->siteNode->getNode($nodePath);
         if ($this->storageNode === null) {
+            preg_match('|([a-z0-9\-]+/)*([a-z0-9\-]+)$|', $nodePath, $matches);
+
+            $nodeName = $matches[2];
+            $uriPathSegment = Slug::create($title)->getValue();
+
+            $storageNodeTemplate = new NodeTemplate();
+            $storageNodeTemplate->setNodeType($this->nodeTypeManager->getNodeType($this->storageNodeTypeName));
             $storageNodeTemplate->setProperty('title', $title);
             $storageNodeTemplate->setProperty('uriPathSegment', $uriPathSegment);
             $storageNodeTemplate->setName($nodeName);
