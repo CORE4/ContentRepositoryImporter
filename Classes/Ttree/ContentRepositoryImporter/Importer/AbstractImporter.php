@@ -193,7 +193,7 @@ abstract class AbstractImporter implements ImporterInterface
     protected $severityLabels = [
         LOG_EMERG => 'Emergency',
         LOG_ALERT => 'Alert',
-        LOG_CRIT => 'Critcyl',
+        LOG_CRIT => 'Critical',
         LOG_ERR => 'Error',
         LOG_WARNING => 'Warning',
         LOG_NOTICE => 'Notice',
