@@ -32,15 +32,18 @@ abstract class AbstractCommandBasedImporter extends AbstractImporter
         $this->unsetAllNodeTemplateProperties($nodeTemplate);
 
         $externalIdentifier = $this->getExternalIdentifierFromRecordData($data);
-        if (!isset($data['uriPathSegment'])) {
-            $data['uriPathSegment'] = Slug::create($this->getLabelFromRecordData($data))->getValue();
-        }
-
-        $this->nodeTemplate->setNodeType($this->nodeType);
-        $this->nodeTemplate->setName($this->renderNodeName($externalIdentifier));
 
         if (!isset($data['mode'])) {
             throw new \Exception(sprintf('Could not determine command mode from data record with external identifier %s. Please make sure that "mode" exists in that record.', $externalIdentifier), 1462985246103);
+        }
+
+        if ($data['mode'] !== 'delete') {
+            if (!isset($data['uriPathSegment'])) {
+                $data['uriPathSegment'] = Slug::create($this->getLabelFromRecordData($data))->getValue();
+            }
+
+            $this->nodeTemplate->setNodeType($this->nodeType);
+            $this->nodeTemplate->setName($this->renderNodeName($externalIdentifier));
         }
 
         $commandMethodName = $data['mode'] . 'Command';
