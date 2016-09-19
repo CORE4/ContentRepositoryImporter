@@ -38,7 +38,7 @@ abstract class AbstractCommandBasedImporter extends AbstractImporter
         }
 
         if ($data['mode'] !== 'delete') {
-            if (!isset($data['uriPathSegment'])) {
+            if ($data['mode'] === 'create' && !isset($data['uriPathSegment'])) {
                 $data['uriPathSegment'] = Slug::create($this->getLabelFromRecordData($data))->getValue();
             }
 
