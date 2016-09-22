@@ -5,6 +5,7 @@ namespace Ttree\ContentRepositoryImporter\DataProvider;
  * This script belongs to the Neos Flow package "Ttree.ContentRepositoryImporter".
  */
 
+use Ttree\ContentRepositoryImporter\Domain\Service\ImportService;
 use Ttree\ContentRepositoryImporter\Service\ProcessedNodeService;
 use TYPO3\Flow\Annotations as Flow;
 use TYPO3\Flow\Log\SystemLoggerInterface;
@@ -29,6 +30,12 @@ abstract class AbstractDataProvider implements DataProviderInterface
      * @api
      */
     protected $processedNodeService;
+
+    /**
+     * @Flow\Inject
+     * @var ImportService
+     */
+    protected $importService;
 
     /**
      * @var integer
